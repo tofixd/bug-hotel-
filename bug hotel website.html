@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container, .rank-container, .change-rank-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-container h2, .rank-container h2, .change-rank-container h2 {
+            margin-bottom: 20px;
+        }
+        .form-container label, .change-rank-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-container input, .change-rank-container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+        }
+        .form-container button, .change-rank-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .form-container button:hover, .change-rank-container button:hover {
+            background-color: #0056b3;
+        }
+        .rank-container, .change-rank-container {
+            display: none;
+            text-align: center;
+        }
+        .logout-button, .change-rank-button {
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        var users = {
+            'Samanta': { password: 'AS76samanta', rank: 'Rank: Blood owner' },
+            'Mason': { password: 'AS34mason', rank: 'Rank: Sapphire' },
+            'Olivers': { password: 'tofixdddisthebest', rank: 'Rank: Sapphire' },
+            'Casey': { password: 'AS99casey', rank: 'Rank: Gold++' }
+        };
+
+        function validateLogin(event) {
+            event.preventDefault();
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            var user = users[username];
+
+            if (user && user.password === password) {
+                document.querySelector('.form-container').style.display = 'none';
+                document.querySelector('.rank-container').style.display = 'block';
+                document.getElementById('rank-message').textContent = user.rank;
+
+                if (username === 'Samanta') {
+                    document.getElementById('change-rank-button').style.display = 'block';
+                } else {
+                    document.getElementById('change-rank-button').style.display = 'none';
+                }
+            } else {
+                alert('Invalid username or password. Please try again.');
+            }
+        }
+
+        function logout() {
+            document.querySelector('.form-container').style.display = 'block';
+            document.querySelector('.rank-container').style.display = 'none';
+            document.querySelector('.change-rank-container').style.display = 'none';
+        }
+
+        function showChangeRankForm() {
+            document.querySelector('.rank-container').style.display = 'none';
+            document.querySelector('.change-rank-container').style.display = 'block';
+        }
+
+        function changeRank(event) {
+            event.preventDefault();
+            var username = document.getElementById('change-username').value;
+            var newRank = document.getElementById('new-rank').value;
+            if (users[username]) {
+                users[username].rank = newRank;
+                alert('Rank changed successfully!');
+                logout();
+            } else {
+                alert('User not found.');
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Login</h2>
+        <form onsubmit="validateLogin(event)">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    <div class="rank-container">
+        <h2 id="rank-message"></h2>
+        <button class="logout-button" onclick="logout()">Logout</button>
+        <button id="change-rank-button" class="change-rank-button" onclick="showChangeRankForm()">Change Rank</button>
+    </div>
+    <div class="change-rank-container">
+        <h2>Change User Rank</h2>
+        <form onsubmit="changeRank(event)">
+            <label for="change-username">Username</label>
+            <input type="text" id="change-username" name="change-username" required>
+            <label for="new-rank">New Rank</label>
+            <input type="text" id="new-rank" name="new-rank" required>
+            <button type="submit">Change Rank</button>
+            <button type="button" onclick="logout()">Cancel</button>
+        </form>
+    </div>
+</body>
+</html>
